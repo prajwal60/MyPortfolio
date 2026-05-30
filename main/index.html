@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Prajwal's Portfolio</title>
+<style>
+:root {
+  --accent:  #00C8D7;
+  --accent2: #0099A8;
+  --nav-h:   64px;
+  --radius:  14px;
+  --trans:   0.3s ease;
+}
+[data-theme="dark"] {
+  --bg:       #1a1a1a;
+  --bg2:      #222222;
+  --bg3:      #2a2a2a;
+  --card:     #2e2e2e;
+  --card2:    #353535;
+  --border:   rgba(255,255,255,0.08);
+  --text:     #e0e0e0;
+  --text2:    #a0a0a0;
+  --heading:  #ffffff;
+  --nav-bg:   rgba(26,26,26,0.92);
+  --shadow:   0 4px 24px rgba(0,0,0,0.4);
+}
+[data-theme="light"] {
+  --bg:       #f5f5f5;
+  --bg2:      #eeeeee;
+  --bg3:      #e8e8e8;
+  --card:     #ffffff;
+  --card2:    #f9f9f9;
+  --border:   rgba(0,0,0,0.09);
+  --text:     #444444;
+  --text2:    #777777;
+  --heading:  #1a1a1a;
+  --nav-bg:   rgba(245,245,245,0.92);
+  --shadow:   0 4px 24px rgba(0,0,0,0.09);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg); color: var(--text);
+  transition: background var(--trans), color var(--trans);
+  overflow-x: hidden;
+}
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; }
+#cvs { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  height: var(--nav-h); background: var(--nav-bg);
+  backdrop-filter: blur(16px); border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 5%; transition: background var(--trans);
+}
+.nav-logo { font-size: 1.4rem; font-weight: 900; color: var(--heading); letter-spacing: -0.02em; }
+.nav-logo span { color: var(--accent); }
+.nav-links { display: flex; gap: 0.2rem; align-items: center; }
+.nav-links a {
+  padding: 0.4rem 0.85rem; border-radius: 8px;
+  font-size: 0.88rem; font-weight: 600; color: var(--text2);
+  transition: color var(--trans), background var(--trans);
+}
+.nav-links a:hover, .nav-links a.active { color: var(--accent); background: rgba(0,200,215,0.08); }
+.nav-right { display: flex; align-items: center; gap: 0.6rem; }
+#theme-btn {
+  width: 42px; height: 42px; border-radius: 50%;
+  border: 1.5px solid var(--border); background: var(--card);
+  cursor: pointer; font-size: 1.1rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: background var(--trans), border-color var(--trans), transform 0.2s;
+}
+#theme-btn:hover { transform: rotate(20deg) scale(1.1); }
+.hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 6px; }
+.hamburger span { display: block; width: 24px; height: 2px; background: var(--heading); border-radius: 2px; transition: transform 0.3s, opacity 0.3s; }
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.mobile-nav {
+  display: none; position: fixed; top: var(--nav-h); left: 0; right: 0; z-index: 490;
+  background: var(--nav-bg); backdrop-filter: blur(16px);
+  flex-direction: column; padding: 1rem; gap: 0.2rem;
+  border-bottom: 1px solid var(--border);
+  transform: translateY(-110%); opacity: 0; transition: transform 0.3s, opacity 0.3s;
+}
+.mobile-nav.open { transform: translateY(0); opacity: 1; }
+.mobile-nav a { padding: 0.75rem 1rem; border-radius: 10px; font-weight: 600; color: var(--text); transition: background var(--trans); }
+.mobile-nav a:hover { background: rgba(0,200,215,0.08); color: var(--accent); }
+section { position: relative; z-index: 1; padding: 6rem 5%; }
+.section-inner { max-width: 1100px; margin: 0 auto; }
+.section-tag { display: inline-block; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
+.section-title { font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 900; color: var(--heading); margin-bottom: 0.5rem; line-height: 1.1; }
+.section-title span { color: var(--accent); }
+.section-line { width: 48px; height: 3px; background: linear-gradient(90deg, var(--accent2), var(--accent)); border-radius: 2px; margin-bottom: 3rem; }
+#home { min-height: 100vh; padding-top: var(--nav-h); display: flex; align-items: center; background: transparent !important; }
+.hero-inner {
+  max-width: 1100px; margin: 0 auto; width: 100%;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 4rem; align-items: center; padding: 3rem 0;
+}
+.hero-greeting { font-size: 1rem; font-weight: 700; color: var(--accent); letter-spacing: 0.05em; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.5rem; }
+.hero-greeting::before { content: ''; display: inline-block; width: 28px; height: 2px; background: var(--accent); border-radius: 1px; }
+.hero-name { font-size: clamp(2.6rem, 5vw, 4rem); font-weight: 900; line-height: 1.05; color: var(--heading); margin-bottom: 0.6rem; }
+.hero-name span { color: var(--accent); }
+.hero-role-wrap { font-size: clamp(1rem, 2vw, 1.2rem); color: var(--text2); margin-bottom: 1.8rem; height: 1.8em; font-weight: 600; }
+.typed-text { color: var(--accent); }
+.cursor { display: inline-block; width: 2px; height: 1.1em; background: var(--accent); margin-left: 2px; animation: blink 0.75s step-end infinite; vertical-align: text-bottom; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+.hero-desc { font-size: 0.95rem; line-height: 1.85; color: var(--text2); margin-bottom: 2rem; max-width: 460px; }
+.hero-desc strong { color: var(--text); }
+.hero-stats { display: flex; gap: 2.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
+.stat-n { font-size: 2rem; font-weight: 900; color: var(--accent); line-height: 1; }
+.stat-l { font-size: 0.68rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.07em; margin-top: 2px; }
+.hero-btns { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  padding: 0.75rem 1.5rem; border-radius: 10px;
+  font-size: 0.9rem; font-weight: 700; cursor: pointer;
+  border: none; letter-spacing: 0.02em;
+  transition: transform 0.18s, box-shadow 0.2s;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn-primary { background: linear-gradient(135deg, var(--accent2), var(--accent)); color: #fff; box-shadow: 0 4px 20px rgba(0,200,215,0.35); }
+.btn-primary:hover { box-shadow: 0 8px 32px rgba(0,200,215,0.5); }
+.btn-outline { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); }
+.btn-outline:hover { background: rgba(0,200,215,0.08); }
+.btn-download {
+  background: transparent;
+  color: #00D97E;
+  border: 1.5px solid #00D97E;
+}
+.btn-download:hover { background: rgba(0,217,126,0.1); box-shadow: 0 4px 18px rgba(0,217,126,0.25); }
+.hero-photo-wrap { display: flex; align-items: center; justify-content: center; position: relative; }
+.hero-photo-ring { position: relative; width: 360px; height: 360px; }
+.hero-photo-ring::before {
+  content: ''; position: absolute; inset: -12px; border-radius: 50%;
+  border: 2px dashed rgba(0,200,215,0.4); animation: spin 18s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.hero-photo-ring::after {
+  content: ''; position: absolute; inset: -12px; border-radius: 50%;
+  border: 2px solid transparent; border-top-color: var(--accent); border-right-color: var(--accent);
+  animation: spin 6s linear infinite reverse;
+}
+.hero-photo-img {
+  width: 100%; height: 100%; border-radius: 50%;
+  object-fit: cover; object-position: center top;
+  border: 4px solid var(--card);
+  box-shadow: 0 0 0 4px var(--accent), var(--shadow);
+}
+.blob { position: absolute; border-radius: 50%; background: radial-gradient(circle, rgba(0,200,215,0.18) 0%, transparent 70%); pointer-events: none; }
+.blob1 { width: 180px; height: 180px; top: -20px; right: -20px; }
+.blob2 { width: 120px; height: 120px; bottom: -10px; left: -10px; }
+.scroll-hint {
+  position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
+  color: var(--text2); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+  animation: bob 2s ease-in-out infinite; z-index: 2;
+}
+@keyframes bob { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+.about-text p { font-size: 0.95rem; line-height: 1.9; color: var(--text); margin-bottom: 1rem; }
+.about-text strong { color: var(--accent); }
+.about-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.about-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.3rem; box-shadow: var(--shadow); transition: transform 0.22s, box-shadow 0.22s, border-color 0.22s; }
+.about-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,200,215,0.12); border-color: rgba(0,200,215,0.3); }
+.about-card-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+.about-card h4 { font-size: 0.85rem; font-weight: 800; color: var(--accent); margin-bottom: 0.3rem; }
+.about-card p { font-size: 0.8rem; color: var(--text2); line-height: 1.55; }
+.skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+.skill-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.6rem; box-shadow: var(--shadow); transition: transform 0.22s, box-shadow 0.22s; }
+.skill-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,200,215,0.1); }
+.skill-card-title { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.09em; color: var(--accent); margin-bottom: 1.1rem; }
+.skill-bar-wrap { margin-bottom: 0.9rem; }
+.skill-bar-label { display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: 600; color: var(--text); margin-bottom: 0.35rem; }
+.skill-bar-track { height: 7px; background: rgba(0,200,215,0.1); border-radius: 4px; overflow: hidden; }
+.skill-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent2), var(--accent)); border-radius: 4px; width: 0; transition: width 1.4s cubic-bezier(0.22, 1, 0.36, 1); }
+.tags { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.tag { background: rgba(0,200,215,0.07); color: var(--accent); font-size: 0.76rem; font-weight: 600; padding: 0.28rem 0.72rem; border-radius: 20px; border: 1px solid rgba(0,200,215,0.18); cursor: default; transition: background 0.2s, color 0.2s, transform 0.18s; }
+.tag:hover { background: var(--accent); color: #fff; transform: scale(1.06); }
+.timeline { position: relative; padding-left: 2.4rem; }
+.timeline::before { content: ''; position: absolute; left: 0; top: 8px; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--accent), rgba(0,200,215,0.06)); border-radius: 1px; }
+.timeline-item { position: relative; margin-bottom: 2.5rem; opacity: 0; transform: translateX(-16px); transition: opacity 0.55s, transform 0.55s; }
+.timeline-item.visible { opacity: 1; transform: translateX(0); }
+.timeline-dot { position: absolute; left: -2.9rem; top: 8px; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); border: 3px solid var(--bg); box-shadow: 0 0 10px rgba(0,200,215,0.5); }
+.timeline-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); transition: border-color 0.2s, box-shadow 0.2s; }
+.timeline-card:hover { border-color: rgba(0,200,215,0.3); box-shadow: 0 8px 28px rgba(0,200,215,0.1); }
+.timeline-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 0.25rem; }
+.timeline-role { font-size: 1rem; font-weight: 800; color: var(--heading); }
+.timeline-date { font-size: 0.73rem; font-weight: 700; color: #fff; background: linear-gradient(135deg, var(--accent2), var(--accent)); padding: 0.22rem 0.72rem; border-radius: 20px; white-space: nowrap; flex-shrink: 0; }
+.timeline-company { font-size: 0.87rem; color: var(--accent); font-weight: 600; margin-bottom: 0.75rem; }
+.timeline-list li { font-size: 0.84rem; color: var(--text2); line-height: 1.65; padding-left: 1.1rem; position: relative; margin-bottom: 0.3rem; }
+.timeline-list li::before { content: '▸'; position: absolute; left: 0; color: var(--accent); font-size: 0.72rem; top: 0.05em; }
+.projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+.project-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.7rem; position: relative; overflow: hidden; box-shadow: var(--shadow); opacity: 0; transform: translateY(20px); transition: opacity 0.5s, transform 0.5s, border-color 0.2s, box-shadow 0.2s; }
+.project-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent2), var(--accent)); }
+.project-card:nth-child(2)::before { background: linear-gradient(90deg,#0099A8,#00e0f0); }
+.project-card:nth-child(3)::before { background: linear-gradient(90deg,#007A8A,#00C8D7); }
+.project-card:nth-child(4)::before { background: linear-gradient(90deg,#005F6B,#48B8E0); }
+.project-card.visible { opacity: 1; transform: translateY(0); }
+.project-card:hover { border-color: rgba(0,200,215,0.3); box-shadow: 0 14px 40px rgba(0,200,215,0.13); }
+.project-icon { font-size: 1.9rem; margin-bottom: 0.8rem; }
+.project-title { font-size: 0.95rem; font-weight: 800; color: var(--heading); margin-bottom: 0.5rem; }
+.project-desc { font-size: 0.83rem; color: var(--text2); line-height: 1.65; }
+.project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; }
+.project-tag { font-size: 0.71rem; font-weight: 700; color: var(--accent2); background: rgba(0,200,215,0.07); padding: 0.2rem 0.64rem; border-radius: 12px; border: 1px solid rgba(0,200,215,0.16); }
+.certs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr)); gap: 1rem; }
+.cert-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem 1.3rem; display: flex; align-items: center; gap: 1rem; box-shadow: var(--shadow); transition: transform 0.22s, border-color 0.22s, box-shadow 0.22s; }
+.cert-card:hover { transform: translateY(-2px); border-color: rgba(0,200,215,0.25); box-shadow: 0 6px 22px rgba(0,200,215,0.1); }
+.cert-icon { width: 44px; height: 44px; border-radius: 10px; background: rgba(0,200,215,0.08); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0; }
+.cert-name { font-size: 0.85rem; font-weight: 800; color: var(--heading); }
+.cert-sub { font-size: 0.74rem; color: var(--text2); margin-top: 2px; }
+.contact-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 3rem; align-items: start; }
+.contact-info p { font-size: 0.95rem; color: var(--text2); line-height: 1.8; margin-bottom: 1.5rem; }
+.contact-links { display: flex; flex-direction: column; gap: 0.75rem; }
+.contact-link { display: flex; align-items: center; gap: 0.9rem; padding: 0.75rem 1rem; border-radius: 11px; background: var(--card); border: 1px solid var(--border); box-shadow: var(--shadow); font-size: 0.88rem; font-weight: 600; color: var(--text); transition: border-color 0.2s, background 0.2s, transform 0.2s; }
+.contact-link:hover { border-color: rgba(0,200,215,0.3); background: var(--card2); transform: translateX(4px); }
+.contact-link-icon { width: 38px; height: 38px; border-radius: 9px; background: rgba(0,200,215,0.1); display: flex; align-items: center; justify-content: center; font-size: 1.05rem; flex-shrink: 0; }
+/* Social-specific icon colours */
+.contact-link-icon.fb-icon  { background: rgba(24,119,242,0.12); }
+.contact-link-icon.ig-icon  { background: rgba(225,48,108,0.12); }
+.contact-link-icon.tt-icon  { background: rgba(0,0,0,0.18); }
+[data-theme="light"] .contact-link-icon.tt-icon { background: rgba(0,0,0,0.08); }
+.contact-link-label { font-weight: 700; color: var(--heading); font-size: 0.88rem; }
+.contact-link-sub { font-size: 0.73rem; color: var(--text2); }
+/* Social icons row */
+.contact-socials-row {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding-top: 0.9rem; margin-top: 0.15rem;
+  border-top: 1px solid var(--border);
+}
+.contact-socials-label {
+  font-size: 0.7rem; font-weight: 800; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text2); white-space: nowrap;
+}
+.social-circle {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid var(--border);
+  background: var(--card); flex-shrink: 0;
+  transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
+}
+.social-circle:hover { transform: translateY(-3px); box-shadow: 0 4px 14px rgba(0,0,0,0.25); border-color: transparent; }
+.social-circle.fb:hover  { background: #1877F2; }
+.social-circle.ig:hover  { background: linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
+.social-circle.tt:hover  { background: #010101; }
+.contact-form { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; box-shadow: var(--shadow); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.form-group { margin-bottom: 1rem; }
+.form-group label { display: block; font-size: 0.79rem; font-weight: 700; color: var(--text); margin-bottom: 0.38rem; }
+.form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.7rem 0.95rem; border: 1.5px solid var(--border); border-radius: 9px; font-size: 0.88rem; font-family: inherit; color: var(--heading); background: var(--bg2); outline: none; transition: border-color 0.2s, box-shadow 0.2s, background var(--trans); }
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,200,215,0.1); }
+.form-group textarea { resize: vertical; min-height: 110px; }
+.form-group select option { background: var(--bg2); }
+.form-submit { width: 100%; padding: 0.85rem; background: linear-gradient(135deg, var(--accent2), var(--accent)); color: #fff; border: none; border-radius: 9px; font-size: 0.92rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: transform 0.18s, box-shadow 0.2s; }
+.form-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,200,215,0.4); }
+.form-ok { display: none; text-align: center; padding: 0.75rem; color: var(--accent); font-weight: 700; font-size: 0.9rem; }
+footer { position: relative; z-index: 1; background: var(--bg2); border-top: 1px solid var(--border); text-align: center; padding: 1.6rem 2rem; font-size: 0.8rem; color: var(--text2); transition: background var(--trans); }
+footer a { color: var(--accent); }
+#btt { position: fixed; bottom: 2rem; right: 2rem; z-index: 400; width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--accent2), var(--accent)); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(0,200,215,0.4); opacity: 0; pointer-events: none; transition: opacity 0.3s, transform 0.3s, box-shadow 0.2s; transform: translateY(12px); }
+#btt.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
+#btt:hover { box-shadow: 0 6px 28px rgba(0,200,215,0.6); transform: translateY(-2px); }
+#guide { position: fixed; bottom: 0; left: 1.5rem; z-index: 450; display: flex; flex-direction: column; align-items: flex-start; pointer-events: none; transform: translateY(58px); transition: transform 0.7s cubic-bezier(0.34, 1.1, 0.64, 1); }
+#guide.risen { transform: translateY(0); }
+@keyframes g-shake { 0%{transform:translateY(0) rotate(0)} 15%{transform:translateY(-8px) rotate(-12deg)} 30%{transform:translateY(-4px) rotate(8deg)} 45%{transform:translateY(-6px) rotate(-6deg)} 60%{transform:translateY(-2px) rotate(4deg)} 75%{transform:translateY(-3px) rotate(-2deg)} 100%{transform:translateY(0) rotate(0)} }
+@keyframes g-fall { 0%{transform:translateY(0) rotate(0);opacity:1} 30%{transform:translateY(-20px) rotate(-30deg);opacity:1} 100%{transform:translateY(120px) rotate(-90deg);opacity:0} }
+@keyframes g-wake { 0%{transform:translateY(80px);opacity:0} 50%{transform:translateY(-12px);opacity:1} 70%{transform:translateY(4px)} 85%{transform:translateY(-5px)} 100%{transform:translateY(0);opacity:1} }
+#guide.punched .g-body { animation: g-shake 0.5s ease forwards; }
+#guide.falling .g-body { animation: g-fall 0.7s ease forwards; }
+#guide.waking  .g-body { animation: g-wake 0.8s cubic-bezier(0.34,1.4,0.64,1) forwards; }
+@keyframes arm-broken { 0%{transform:rotate(0)} 20%{transform:rotate(60deg)} 60%{transform:rotate(55deg)} 100%{transform:rotate(50deg)} }
+#guide.punched .g-al, #guide.falling .g-al { animation: arm-broken 0.4s ease forwards !important; }
+@keyframes g-bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-2px)} }
+@keyframes g-leg { 0%,100%{transform:rotate(0)} 25%{transform:rotate(10deg)} 75%{transform:rotate(-10deg)} }
+@keyframes g-arm { 0%,100%{transform:rotate(0)} 25%{transform:rotate(-12deg)} 75%{transform:rotate(12deg)} }
+.g-body { animation: g-bob 3.5s ease-in-out infinite; cursor: pointer; pointer-events: auto; }
+.g-ll { transform-origin:10px 0; animation: g-leg 3.5s ease-in-out infinite; }
+.g-lr { transform-origin:10px 0; animation: g-leg 3.5s ease-in-out infinite reverse; }
+.g-al { transform-origin:2px 4px; animation: g-arm 3.5s ease-in-out infinite; }
+.g-ar { transform-origin:18px 4px; animation: g-arm 3.5s ease-in-out infinite reverse; }
+#guide.punched .g-ll, #guide.falling .g-ll, #guide.punched .g-lr, #guide.falling .g-lr, #guide.punched .g-ar, #guide.falling .g-ar { animation: none !important; }
+.g-bubble { background: var(--card); color: var(--heading); border: 1.5px solid var(--accent); border-radius: 14px 14px 14px 0; padding: 0.6rem 0.85rem; font-size: 0.74rem; font-weight: 600; line-height: 1.45; max-width: 165px; margin-left: 4px; margin-bottom: 5px; box-shadow: 0 4px 20px rgba(0,200,215,0.2); opacity: 0; transform: scale(0.85) translateY(8px); transition: opacity 0.45s, transform 0.45s; pointer-events: auto; cursor: pointer; white-space: pre-line; }
+.g-bubble.show { opacity: 1; transform: scale(1) translateY(0); }
+.g-stars { position: absolute; top: -30px; left: 10px; font-size: 1.1rem; opacity: 0; pointer-events: none; }
+@keyframes stars-pop { 0%{opacity:0;transform:scale(0.5)} 30%{opacity:1;transform:scale(1.3) rotate(20deg)} 70%{opacity:1;transform:scale(1) rotate(-10deg)} 100%{opacity:0;transform:scale(0.8)} }
+#guide.punched .g-stars { animation: stars-pop 0.8s ease forwards; }
+.fi { opacity: 0; transform: translateY(22px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fi.visible { opacity: 1; transform: translateY(0); }
+@media (max-width: 900px) {
+  .hero-inner { grid-template-columns: 1fr; text-align: center; gap: 2.5rem; }
+  .hero-photo-wrap { justify-content: center; }
+  .hero-greeting::before { display: none; }
+  .hero-greeting { justify-content: center; }
+  .hero-btns { justify-content: center; }
+  .hero-stats { justify-content: center; }
+  .hero-desc { margin: 0 auto 2rem; }
+  .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .hero-photo-ring { width: 280px; height: 280px; }
+}
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .mobile-nav { display: flex; }
+  section { padding: 4.5rem 5%; }
+  .about-cards { grid-template-columns: 1fr 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  section { padding: 4rem 1.2rem; }
+  .about-cards { grid-template-columns: 1fr; }
+  nav { padding: 0 1.2rem; }
+  .hero-photo-ring { width: 220px; height: 220px; }
+}
+@media (min-width: 1280px) { .section-inner { max-width: 1160px; } }
+</style>
+</head>
+<body>
+<canvas id="cvs"></canvas>
+<nav>
+  <a class="nav-logo" href="#home">Prajwal<span>Ghimire.</span></a>
+  <div class="nav-links" id="navLinks">
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#skills">Skills</a>
+    <a href="#experience">Experience</a>
+    <a href="#projects">Projects</a>
+    <a href="#certifications">Certs</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div class="nav-right">
+    <button id="theme-btn" title="Toggle theme">🌙</button>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="#home" onclick="closeNav()">Home</a>
+  <a href="#about" onclick="closeNav()">About</a>
+  <a href="#skills" onclick="closeNav()">Skills</a>
+  <a href="#experience" onclick="closeNav()">Experience</a>
+  <a href="#projects" onclick="closeNav()">Projects</a>
+  <a href="#certifications" onclick="closeNav()">Certifications</a>
+  <a href="#contact" onclick="closeNav()">Contact</a>
+</div>
+<section id="home">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-greeting">Hello, I'm</div>
+      <h1 class="hero-name">Prajwal<br><span>Ghimire</span></h1>
+      <div class="hero-role-wrap">
+        <span class="typed-text" id="typed"></span><span class="cursor"></span>
+      </div>
+      <p class="hero-desc">
+        <strong>IT Support Technician</strong> based in Hobart, Tasmania 🇦🇺 · specialising in L1/L2 helpdesk, MSP support, and endpoint management. Master of IT (Cyber Security) · ITIL Foundation Certified.
+      </p>
+      <div class="hero-stats">
+        <div><div class="stat-n">2+</div><div class="stat-l">Years in IT</div></div>
+        <div><div class="stat-n">95%+</div><div class="stat-l">First Contact<br>Resolution</div></div>
+        <div><div class="stat-n">20+</div><div class="stat-l">SME Clients</div></div>
+        <div><div class="stat-n">100%</div><div class="stat-l">SLA Compliance</div></div>
+      </div>
+      <div class="hero-btns">
+        <a href="#contact" class="btn btn-primary">✉️ Contact Me</a>
+        <a href="#experience" class="btn btn-outline">View Experience</a>
+        <a href="https://www.linkedin.com/in/prajwal-ghimire-654924164/" target="_blank" class="btn btn-outline">💼 LinkedIn</a>
+        <!-- ↓ Update href to your actual resume file path or hosted URL -->
+        <a href="Prajwal_Ghimire_IT_Resume.pdf" download="Prajwal_Ghimire_Resume.pdf" class="btn btn-download">⬇️ Resume</a>
+      </div>
+    </div>
+    <div class="hero-photo-wrap">
+      <div class="hero-photo-ring">
+        <div class="blob blob1"></div>
+        <div class="blob blob2"></div>
+        <img class="hero-photo-img" id="heroImg"
+          src="https://i.ibb.co/Xk8SHPF5/IMG-4214-2.avif"
+          alt="Prajwal Ghimire"
+          onerror="this.style.background='var(--card)';this.removeAttribute('src')"/>
+      </div>
+    </div>
+  </div>
+  <a href="#about" class="scroll-hint">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    scroll
+  </a>
+</section>
+<section id="about">
+  <div class="section-inner">
+    <div class="section-tag">Who I Am</div>
+    <h2 class="section-title">About <span>Me</span></h2>
+    <div class="section-line"></div>
+    <div class="about-grid">
+      <div class="about-text fi">
+        <p>I'm an experienced IT Support Technician based in Hobart, Tasmania, specialising in L1/L2 technical support across MSP, enterprise, and field environments. With a proven track record resolving 95%+ of issues on first contact, I bring hands-on expertise across Windows, Linux, Mac, Microsoft 365, Intune, and ServiceNow.</p>
+        <p>I hold a <strong>Master of Information Technology (Cyber Security)</strong> from King's Own Institute, Sydney, and a Bachelor of IT (Software Engineering). ITIL Foundation and Google Cybersecurity certified, with a full Australian driver's licence.</p>
+        <p>Whether break-fix on-site, device management, or network troubleshooting, I deliver clear communication and reliable resolutions that keep people productive.</p>
+        <div style="margin-top:1.5rem"><a href="#contact" class="btn btn-primary">Get In Touch →</a></div>
+      </div>
+      <div class="about-cards fi">
+        <div class="about-card"><div class="about-card-icon">🖥️</div><h4>MSP & On-Site</h4><p>20+ SME clients, L1/L2 via phone, remote & on-site across Tasmania</p></div>
+        <div class="about-card"><div class="about-card-icon">🪟</div><h4>Windows, Linux & Mac</h4><p>Windows 7–11/Server, Unix, Linux, iOS/Android environments</p></div>
+        <div class="about-card"><div class="about-card-icon">⚙️</div><h4>Scripting & Automation</h4><p>PowerShell, Bash, Python · automating deployment & admin tasks</p></div>
+        <div class="about-card"><div class="about-card-icon">🎓</div><h4>Qualifications</h4><p>MIT Graduate · ITIL Foundation · Google Cybersecurity · Driver's Licence</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="skills">
+  <div class="section-inner">
+    <div class="section-tag">What I Know</div>
+    <h2 class="section-title">Technical <span>Skills</span></h2>
+    <div class="section-line"></div>
+    <div class="skills-grid">
+      <div class="skill-card fi">
+        <div class="skill-card-title">🛠️ Core Support</div>
+        <div class="skill-bar-wrap"><div class="skill-bar-label"><span>Windows Desktop & Server</span><span>95%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-w="95"></div></div></div>
+        <div class="skill-bar-wrap"><div class="skill-bar-label"><span>Microsoft 365 & Intune</span><span>90%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-w="90"></div></div></div>
+        <div class="skill-bar-wrap"><div class="skill-bar-label"><span>Hardware Troubleshooting</span><span>92%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-w="92"></div></div></div>
+        <div class="skill-bar-wrap"><div class="skill-bar-label"><span>Networking & VPN</span><span>85%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-w="85"></div></div></div>
+        <div class="skill-bar-wrap"><div class="skill-bar-label"><span>Active Directory & Azure AD</span><span>88%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-w="88"></div></div></div>
+      </div>
+      <div class="skill-card fi">
+        <div class="skill-card-title">📋 ITSM & Tools</div>
+        <div class="skill-bar-wrap"><div class="skill-bar-label"><span>ServiceNow</span><span>90%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-w="90"></div></div></div>
+        <div class="skill-bar-wrap"><div class="skill-bar-label"><span>Jira / Zendesk / Freshdesk</span><span>82%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-w="82"></div></div></div>
+        <div class="skill-bar-wrap"><div class="skill-bar-label"><span>PowerShell / Bash</span><span>80%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-w="80"></div></div></div>
+        <div class="skill-bar-wrap"><div class="skill-bar-label"><span>Device Imaging & Deploy</span><span>88%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-w="88"></div></div></div>
+        <div class="skill-bar-wrap"><div class="skill-bar-label"><span>Remote Support (RDP/TeamViewer)</span><span>93%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-w="93"></div></div></div>
+      </div>
+      <div class="skill-card fi">
+        <div class="skill-card-title">🔐 Security & Compliance</div>
+        <div class="tags"><span class="tag">MFA</span><span class="tag">Endpoint Protection</span><span class="tag">Antivirus Mgmt</span><span class="tag">ASD Essential 8</span><span class="tag">ISO 27001</span><span class="tag">NIST</span><span class="tag">Zscaler</span><span class="tag">VPN Management</span><span class="tag">Patch Management</span><span class="tag">ITIL</span><span class="tag">SLA Compliance</span><span class="tag">Audit Docs</span></div>
+      </div>
+      <div class="skill-card fi">
+        <div class="skill-card-title">📡 Platforms & Environments</div>
+        <div class="tags"><span class="tag">Windows 7–11</span><span class="tag">Server 2019/22</span><span class="tag">Linux / Ubuntu</span><span class="tag">macOS</span><span class="tag">iOS / Android MDM</span><span class="tag">Intune</span><span class="tag">SCCM</span><span class="tag">Exchange Online</span><span class="tag">SharePoint</span><span class="tag">Teams</span><span class="tag">TCP/IP · DNS · DHCP</span><span class="tag">LAN / WAN</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="experience">
+  <div class="section-inner">
+    <div class="section-tag">Career Journey</div>
+    <h2 class="section-title">Work <span>Experience</span></h2>
+    <div class="section-line"></div>
+    <div class="timeline">
+      <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-card">
+        <div class="timeline-header"><div class="timeline-role">On-Site IT Support Technician (L1/L2)</div><div class="timeline-date">May 2025 – Present</div></div>
+        <div class="timeline-company">IT Hero – MSP · Hobart, TAS</div>
+        <ul class="timeline-list"><li>Primary support for 20+ SME clients · resolving 95%+ of L1/L2 issues on first contact.</li><li>On-site support for Cellarbrations, Woolworths, IGA across Tasmania.</li><li>Install, configure and maintain end-user devices across Windows and mixed environments.</li><li>100% audit compliance through meticulous documentation of service resolutions.</li></ul>
+      </div></div>
+      <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-card">
+        <div class="timeline-header"><div class="timeline-role">IT Support Technician</div><div class="timeline-date">Jun 2024 – May 2025</div></div>
+        <div class="timeline-company">Woolworths Group · Sydney, NSW</div>
+        <ul class="timeline-list"><li>L1/L2 support for 100+ Windows 11 devices · 98% SLA compliance.</li><li>Managed incidents via ServiceNow · 100% SLA compliance.</li><li>Administered Microsoft 365 and Intune for device policy and software deployment.</li><li>VPN, Zscaler, and network troubleshooting across switches, routers, servers.</li></ul>
+      </div></div>
+      <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-card">
+        <div class="timeline-header"><div class="timeline-role">IT Field Technician → Tasmania Regional Rep</div><div class="timeline-date">2023 – 2024</div></div>
+        <div class="timeline-company">IT Field Services · Sydney / Hobart, TAS</div>
+        <ul class="timeline-list"><li>Break-fix and preventive maintenance on 50+ computers, POS systems, and LAN connections.</li><li>Appointed Tasmanian regional rep · managing statewide client support independently.</li></ul>
+      </div></div>
+      <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-card">
+        <div class="timeline-header"><div class="timeline-role">Grocery Supervisor (Part-time)</div><div class="timeline-date">Sep 2022 – May 2024</div></div>
+        <div class="timeline-company">Woolworths · Sydney, NSW</div>
+        <ul class="timeline-list"><li>Led and coached a team of 15+ · communication and prioritisation applicable to IT support.</li><li>Supported onboarding of 50+ users · account setup, access, and troubleshooting.</li></ul>
+      </div></div>
+    </div>
+  </div>
+</section>
+<section id="projects">
+  <div class="section-inner">
+    <div class="section-tag">What I've Built</div>
+    <h2 class="section-title">Relevant <span>Projects</span></h2>
+    <div class="section-line"></div>
+    <div class="projects-grid">
+      <div class="project-card"><div class="project-icon">🗄️</div><div class="project-title">Active Directory Home Lab</div><p class="project-desc">Windows Server 2019 with Group Policy, user provisioning, and domain auth for 20 simulated users.</p><div class="project-tags"><span class="project-tag">Windows Server</span><span class="project-tag">Active Directory</span><span class="project-tag">Group Policy</span></div></div>
+      <div class="project-card"><div class="project-icon">⚡</div><div class="project-title">M365 Automated Deployment</div><p class="project-desc">Automated device imaging and user onboarding using Intune and PowerShell · 35% faster deployment.</p><div class="project-tags"><span class="project-tag">Intune</span><span class="project-tag">PowerShell</span><span class="project-tag">Windows 11</span></div></div>
+      <div class="project-card"><div class="project-icon">🔒</div><div class="project-title">Ubuntu VPN Server Build</div><p class="project-desc">Ubuntu VPN server with UFW firewall, certificate-based auth, and secure remote access.</p><div class="project-tags"><span class="project-tag">Ubuntu</span><span class="project-tag">VPN</span><span class="project-tag">UFW Firewall</span></div></div>
+      <div class="project-card"><div class="project-icon">📊</div><div class="project-title">SCCM & Intune Device Lab</div><p class="project-desc">Endpoint policy management, patch deployment, and compliance reporting for MSP environments.</p><div class="project-tags"><span class="project-tag">SCCM</span><span class="project-tag">Intune</span><span class="project-tag">Patch Mgmt</span></div></div>
+    </div>
+  </div>
+</section>
+<section id="certifications">
+  <div class="section-inner">
+    <div class="section-tag">Credentials</div>
+    <h2 class="section-title">Certifications & <span>Education</span></h2>
+    <div class="section-line"></div>
+    <div class="certs-grid fi">
+      <div class="cert-card"><div class="cert-icon">📜</div><div><div class="cert-name">ITIL Foundation</div><div class="cert-sub">IT Service Management · 2023</div></div></div>
+      <div class="cert-card"><div class="cert-icon">🔐</div><div><div class="cert-name">Google Cybersecurity</div><div class="cert-sub">Certificate · 2024</div></div></div>
+      <div class="cert-card"><div class="cert-icon">🎯</div><div><div class="cert-name">Threat Hunting Essentials</div><div class="cert-sub">LinkedIn Learning · 2024</div></div></div>
+      <div class="cert-card"><div class="cert-icon">🎓</div><div><div class="cert-name">Master of IT (Cyber Security)</div><div class="cert-sub">King's Own Institute · 2022–2024</div></div></div>
+      <div class="cert-card"><div class="cert-icon">💻</div><div><div class="cert-name">Bachelor of IT (Software Eng.)</div><div class="cert-sub">Uni of Wolverhampton · 2019–2021</div></div></div>
+      <div class="cert-card"><div class="cert-icon">🚗</div><div><div class="cert-name">Full Australian Driver's Licence</div><div class="cert-sub">Full right to work in Australia</div></div></div>
+    </div>
+  </div>
+</section>
+<section id="contact">
+  <div class="section-inner">
+    <div class="section-tag">Let's Connect</div>
+    <h2 class="section-title">Contact <span>Me</span></h2>
+    <div class="section-line"></div>
+    <div class="contact-grid">
+      <div class="fi">
+        <p>I'm actively looking for IT support and helpdesk opportunities across Tasmania and remotely. Whether you have a role, project, or just want to connect. I'd love to hear from you.</p>
+        <div class="contact-links">
+          <!-- Direct contact -->
+          <a href="tel:+61452456417" class="contact-link">
+            <div class="contact-link-icon">📞</div>
+            <div><div class="contact-link-label">+61 452 456 417</div><div class="contact-link-sub">Mon–Fri, 8am–6pm AEST</div></div>
+          </a>
+          <a href="mailto:iamprajwalghimire@gmail.com" class="contact-link">
+            <div class="contact-link-icon">✉️</div>
+            <div><div class="contact-link-label">iamprajwalghimire@gmail.com</div><div class="contact-link-sub">Responds within 24 hours</div></div>
+          </a>
+          <a href="https://www.linkedin.com/in/prajwal-ghimire-654924164/" target="_blank" class="contact-link">
+            <div class="contact-link-icon">💼</div>
+            <div><div class="contact-link-label">LinkedIn</div><div class="contact-link-sub">Connect professionally</div></div>
+          </a>
+          <!-- Socials row -->
+          <div class="contact-socials-row">
+            <span class="contact-socials-label">Find me on</span>
+            <!-- Facebook — update href -->
+            <a href="https://www.facebook.com/pghimire0" target="_blank" class="social-circle fb" title="Facebook">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073C24 5.404 18.627 0 12 0S0 5.404 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.313 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.93-1.956 1.886v2.286h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+            </a>
+            <!-- Instagram — update href -->
+            <a href="https://www.instagram.com/iamprajwalghimire/" target="_blank" class="social-circle ig" title="Instagram">
+              <svg width="16" height="16" viewBox="0 0 24 24">
+                <defs><linearGradient id="ig2" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#f09433"/><stop offset="50%" stop-color="#dc2743"/><stop offset="100%" stop-color="#bc1888"/></linearGradient></defs>
+                <path fill="url(#ig2)" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+              </svg>
+            </a>
+            <!-- TikTok — update href -->
+            <a href="https://www.tiktok.com/@idiots852" target="_blank" class="social-circle tt" title="TikTok">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.3 6.3 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.75a4.85 4.85 0 01-1.01-.06z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="contact-form fi">
+        <form id="contactForm" onsubmit="sendMsg(event)">
+          <div class="form-row">
+            <div class="form-group"><label>First Name *</label><input type="text" id="fn" placeholder="Prajwal" required/></div>
+            <div class="form-group"><label>Last Name</label><input type="text" id="ln" placeholder="Ghimire"/></div>
+          </div>
+          <div class="form-group"><label>Email *</label><input type="email" id="em" placeholder="prajwal@company.com" required/></div>
+          <div class="form-group"><label>Subject *</label>
+            <select id="su" required><option value="">Select…</option><option>Job Opportunity</option><option>Contract / Freelance</option><option>General Enquiry</option></select>
+          </div>
+          <div class="form-group"><label>Message *</label><textarea id="ms" placeholder="Tell me about the role or project…" required></textarea></div>
+          <button type="submit" class="form-submit" id="formBtn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Send Message
+          </button>
+          <div class="form-ok" id="formOk">✅ Opening your email app…</div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+<footer>
+  <p>© 2026 Prajwal Ghimire · Hobart, Tasmania 🇦🇺 · <a href="mailto:iamprajwalghimire@gmail.com">iamprajwalghimire@gmail.com</a> · <a href="https://www.linkedin.com/in/prajwal-ghimire-654924164/" target="_blank">LinkedIn</a></p>
+</footer>
+<button id="btt" aria-label="Back to top">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+<div id="guide">
+  <div class="g-bubble" id="gbub">👋 G'day! I'm Prajwal.<br>Try punching me! 😄</div>
+  <div class="g-stars" id="pstars">⭐💫✨</div>
+  <svg class="g-body" id="gsvg" width="72" height="92" viewBox="0 0 60 92" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="30" cy="90" rx="13" ry="2.5" fill="rgba(0,0,0,0.2)"/>
+    <rect x="15" y="78" width="11" height="5" rx="2.5" fill="#EEE" stroke="#CCC" stroke-width=".5"/>
+    <rect x="34" y="78" width="11" height="5" rx="2.5" fill="#EEE" stroke="#CCC" stroke-width=".5"/>
+    <g class="g-ll"><rect x="16" y="57" width="11" height="23" rx="4" fill="#7B9BB5"/></g>
+    <g class="g-lr"><rect x="33" y="57" width="11" height="23" rx="4" fill="#6A8DA8"/></g>
+    <rect x="14" y="56" width="32" height="3.5" rx="1.5" fill="#2A1A08"/>
+    <rect x="13" y="35" width="34" height="23" rx="7" fill="#F8F8F8" stroke="#E0E0E0" stroke-width=".7"/>
+    <circle cx="30" cy="41" r="1" fill="#D8D8D8"/><circle cx="30" cy="46" r="1" fill="#D8D8D8"/><circle cx="30" cy="51" r="1" fill="#D8D8D8"/>
+    <g class="g-al" id="arm-l">
+      <rect x="3" y="37" width="10" height="18" rx="5" fill="#C68642"/>
+      <line id="crack1" x1="8" y1="44" x2="5" y2="48" stroke="#8B4513" stroke-width="1.5" stroke-linecap="round" opacity="0"/>
+      <line id="crack2" x1="8" y1="44" x2="11" y2="48" stroke="#8B4513" stroke-width="1.5" stroke-linecap="round" opacity="0"/>
+    </g>
+    <g class="g-ar"><rect x="47" y="37" width="10" height="18" rx="5" fill="#C68642"/></g>
+    <rect x="25" y="26" width="10" height="11" rx="3" fill="#C68642"/>
+    <g>
+      <ellipse cx="30" cy="17" rx="16" ry="17" fill="#C68642"/>
+      <path d="M14,13 Q14,2 30,4 Q46,2 46,13 Q46,7 30,6 Q14,7 14,13 Z" fill="#120600"/>
+      <path d="M14,13 Q13,17 15,21 Q14,17 16,15 Z" fill="#1E0A00"/>
+      <path d="M46,13 Q47,17 45,21 Q46,17 44,15 Z" fill="#1E0A00"/>
+      <g id="face-normal">
+        <ellipse cx="23" cy="17" rx="3" ry="3.3" fill="white"/><ellipse cx="37" cy="17" rx="3" ry="3.3" fill="white"/>
+        <circle cx="23.5" cy="17.5" r="2" fill="#140800"/><circle cx="37.5" cy="17.5" r="2" fill="#140800"/>
+        <circle cx="24" cy="16.8" r=".65" fill="white"/><circle cx="38" cy="16.8" r=".65" fill="white"/>
+        <path d="M20,12 Q23,10.5 26,12" fill="none" stroke="#140800" stroke-width="1.4" stroke-linecap="round"/>
+        <path d="M34,12 Q37,10.5 40,12" fill="none" stroke="#140800" stroke-width="1.4" stroke-linecap="round"/>
+        <path d="M23,23 Q30,28 37,23" fill="none" stroke="#7A3010" stroke-width="1.4" stroke-linecap="round"/>
+        <circle cx="18" cy="21" r="2.8" fill="rgba(210,90,60,.15)"/><circle cx="42" cy="21" r="2.8" fill="rgba(210,90,60,.15)"/>
+      </g>
+      <g id="face-punch" display="none">
+        <line x1="20" y1="14" x2="26" y2="20" stroke="#140800" stroke-width="2" stroke-linecap="round"/>
+        <line x1="26" y1="14" x2="20" y2="20" stroke="#140800" stroke-width="2" stroke-linecap="round"/>
+        <line x1="34" y1="14" x2="40" y2="20" stroke="#140800" stroke-width="2" stroke-linecap="round"/>
+        <line x1="40" y1="14" x2="34" y2="20" stroke="#140800" stroke-width="2" stroke-linecap="round"/>
+        <path d="M22,25 Q27,22 36,26" fill="none" stroke="#7A3010" stroke-width="1.5" stroke-linecap="round"/>
+        <ellipse cx="24" cy="21" rx="4" ry="2.5" fill="rgba(80,40,120,.35)"/>
+        <line x1="15" y1="10" x2="12" y2="7" stroke="#FF4444" stroke-width="1.5" stroke-linecap="round" opacity=".7"/>
+        <ellipse cx="43" cy="12" rx="2" ry="3" fill="rgba(100,180,255,.6)"/>
+      </g>
+    </g>
+  </svg>
+</div>
+<script>
+/* ═══ THEME ═══ */
+const html = document.documentElement;
+const themeBtn = document.getElementById('theme-btn');
+const saved = localStorage.getItem('theme') || 'dark';
+html.setAttribute('data-theme', saved);
+themeBtn.textContent = saved === 'dark' ? '☀️' : '🌙';
+themeBtn.addEventListener('click', () => {
+  const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  themeBtn.textContent = next === 'dark' ? '☀️' : '🌙';
+  localStorage.setItem('theme', next);
+});
+/* ═══ TYPED ═══ */
+const roles = ['IT Support Technician','L1 / L2 Helpdesk Engineer','MSP Field Technician','Cyber Security Graduate','Network Troubleshooter'];
+let ri = 0, ci = 0, deleting = false;
+const typedEl = document.getElementById('typed');
+function type() {
+  const word = roles[ri];
+  if (!deleting) { typedEl.textContent = word.slice(0, ++ci); if (ci === word.length) { deleting = true; setTimeout(type, 1800); return; } }
+  else { typedEl.textContent = word.slice(0, --ci); if (ci === 0) { deleting = false; ri = (ri + 1) % roles.length; } }
+  setTimeout(type, deleting ? 55 : 90);
+}
+type();
+/* ═══ PARTICLE + WIRE NETWORK ═══ */
+(function () {
+  const cv = document.getElementById('cvs');
+  const cx = cv.getContext('2d');
+  let W, H, mx = -9999, my = -9999;
+  const N        = 3000;
+  const REPEL    = 300;
+  const BREAK    = 150;
+  const MAX_CONN = 100;
+  const DAMP     = 0.86;
+  const SPRING   = 0.016;
+  function resize() { W = cv.width = window.innerWidth; H = cv.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', () => { resize(); initDots(); }, { passive: true });
+  window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; }, { passive: true });
+  window.addEventListener('touchmove', e => { if (e.touches[0]) { mx = e.touches[0].clientX; my = e.touches[0].clientY; } }, { passive: true });
+  const DOTS = [];
+  function initDots() {
+    const dh = Math.max(document.body.scrollHeight, 6000);
+    DOTS.forEach(d => { d.baseX = d.fx * W; d.baseY = d.fy * dh; d.x = d.baseX; d.y = d.baseY; d.vx = 0; d.vy = 0; });
+  }
+  for (let i = 0; i < N; i++) {
+    DOTS.push({ fx: Math.random(), fy: Math.random(), x: 0, y: 0, baseX: 0, baseY: 0, vx: 0, vy: 0, r: Math.random() * 2.8 + 1.2, a: Math.random() * 0.5 + 0.15 });
+  }
+  initDots();
+  function dotColor(a) {
+    return html.getAttribute('data-theme') === 'dark'
+      ? `rgba(0,200,215,${a})`
+      : `rgba(0,130,150,${a})`;
+  }
+  function wireColor(a) {
+    return html.getAttribute('data-theme') === 'dark'
+      ? `rgba(0,200,215,${a})`
+      : `rgba(0,130,150,${a})`;
+  }
+  function draw() {
+    cx.clearRect(0, 0, W, H);
+    const sy = window.scrollY;
+    DOTS.forEach(d => {
+      const sY = d.y - sy;
+      const dx = d.x - mx, dy = sY - my;
+      const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+      if (dist < REPEL) { const f = (REPEL - dist) / REPEL; d.vx += dx / dist * f * 10; d.vy += dy / dist * f * 10; }
+      d.vx += (d.baseX - d.x) * SPRING; d.vy += (d.baseY - d.y) * SPRING;
+      d.vx *= DAMP; d.vy *= DAMP;
+      d.x += d.vx; d.y += d.vy;
+    });
+    cx.lineWidth = 0.55;
+    for (let i = 0; i < DOTS.length; i++) {
+      const a = DOTS[i];
+      const aY = a.y - sy;
+      if (aY < -MAX_CONN || aY > H + MAX_CONN) continue;
+      for (let j = i + 1; j < DOTS.length; j++) {
+        const b = DOTS[j];
+        const bY = b.y - sy;
+        if (bY < -MAX_CONN || bY > H + MAX_CONN) continue;
+        const ddx = a.x - b.x, ddy = aY - bY;
+        const d = Math.sqrt(ddx * ddx + ddy * ddy);
+        if (d > MAX_CONN) continue;
+        const daMx = a.x - mx, daMy = aY - my;
+        const dA = Math.sqrt(daMx * daMx + daMy * daMy);
+        if (dA < BREAK) continue;
+        const dbMx = b.x - mx, dbMy = bY - my;
+        const dB = Math.sqrt(dbMx * dbMx + dbMy * dbMy);
+        if (dB < BREAK) continue;
+        const alpha = (1 - d / MAX_CONN) * 0.28;
+        cx.beginPath();
+        cx.moveTo(a.x, aY);
+        cx.lineTo(b.x, bY);
+        cx.strokeStyle = wireColor(alpha);
+        cx.stroke();
+      }
+    }
+    DOTS.forEach(d => {
+      const sY = d.y - sy;
+      if (sY < -10 || sY > H + 10) return;
+      cx.beginPath();
+      cx.arc(d.x, sY, d.r, 0, Math.PI * 2);
+      cx.fillStyle = dotColor(d.a);
+      cx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+/* ═══ NAV ═══ */
+const hamburger = document.getElementById('hamburger');
+const mobileNav = document.getElementById('mobileNav');
+hamburger.addEventListener('click', () => { hamburger.classList.toggle('open'); mobileNav.classList.toggle('open'); });
+function closeNav() { hamburger.classList.remove('open'); mobileNav.classList.remove('open'); }
+const sections = document.querySelectorAll('section[id]');
+const navAs = document.querySelectorAll('.nav-links a[href^="#"]');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 130) cur = s.id; });
+  navAs.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
+}, { passive: true });
+/* ═══ BACK TO TOP ═══ */
+const btt = document.getElementById('btt');
+btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+window.addEventListener('scroll', () => btt.classList.toggle('show', window.scrollY > 400), { passive: true });
+/* ═══ INTERSECTION OBSERVER ═══ */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('visible');
+    e.target.querySelectorAll('.skill-bar-fill').forEach(b => b.style.width = b.dataset.w + '%');
+    io.unobserve(e.target);
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fi, .timeline-item, .project-card, .skill-card').forEach(el => io.observe(el));
+document.querySelectorAll('.project-card').forEach((c, i) => c.style.transitionDelay = (i * 0.08) + 's');
+document.querySelectorAll('.timeline-item').forEach((c, i) => c.style.transitionDelay = (i * 0.06) + 's');
+/* ═══ CONTACT FORM ═══ */
+function sendMsg(e) {
+  e.preventDefault();
+  const fn = document.getElementById('fn').value, ln = document.getElementById('ln').value;
+  const em = document.getElementById('em').value, su = document.getElementById('su').value, ms = document.getElementById('ms').value;
+  window.location.href = 'mailto:iamprajwalghimire@gmail.com?subject=' + encodeURIComponent(su + ' — from ' + fn + ' ' + ln) + '&body=' + encodeURIComponent('From: ' + fn + ' ' + ln + '\nEmail: ' + em + '\n\n' + ms);
+  document.getElementById('formOk').style.display = 'block';
+  const btn = document.getElementById('formBtn'); btn.textContent = '✓ Opening email…'; btn.style.opacity = '.65';
+}
+/* ═══ CARTOON ═══ */
+const guide = document.getElementById('guide');
+const gbub  = document.getElementById('gbub');
+const gsvg  = document.getElementById('gsvg');
+const faceN = document.getElementById('face-normal');
+const faceP = document.getElementById('face-punch');
+const c1    = document.getElementById('crack1');
+const c2    = document.getElementById('crack2');
+const pstars= document.getElementById('pstars');
+const MSGS  = {
+  home:'👋 G\'day! Click me\nfor a surprise! 😄', about:'🌊 This is who\nI am dive in!',
+  skills:'⚡ My technical\nstackoverflowed! 😅', experience:'💼 My work history\nacross Australia!',
+  projects:'🛠️ Cool stuff\nI\'ve built!', certifications:'🎓 My certs\nand degrees!',
+  contact:'📬 Let\'s connect!\nDon\'t punch me again!'
+};
+let lastSec = '', guideTimer = null, punchLocked = false;
+function showGuide(msg) {
+  gbub.classList.remove('show'); clearTimeout(guideTimer);
+  guideTimer = setTimeout(() => { gbub.textContent = msg; gbub.classList.add('show'); }, 350);
+  guide.classList.add('risen'); clearTimeout(guide._sink);
+  guide._sink = setTimeout(() => { if (!punchLocked) guide.classList.remove('risen'); }, 3200);
+}
+window.addEventListener('scroll', () => {
+  let cur = 'home';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 200) cur = s.id; });
+  if (cur !== lastSec) { lastSec = cur; showGuide(MSGS[cur] || MSGS.home); }
+}, { passive: true });
+setTimeout(() => { gbub.classList.add('show'); guide.classList.add('risen'); guide._sink = setTimeout(() => guide.classList.remove('risen'), 3500); }, 1200);
+gbub.addEventListener('click', () => gbub.classList.toggle('show'));
+function setPunched(on) {
+  faceN.style.display = on ? 'none' : ''; faceP.style.display = on ? '' : 'none';
+  c1.setAttribute('opacity', on ? '1' : '0'); c2.setAttribute('opacity', on ? '1' : '0');
+}
+gsvg.addEventListener('click', () => {
+  if (punchLocked) return; punchLocked = true;
+  setPunched(true);
+  guide.classList.remove('punched','falling','waking'); guide.classList.add('risen'); gbub.classList.remove('show');
+  void guide.offsetWidth;
+  guide.classList.add('punched');
+  pstars.style.animation = 'none'; void pstars.offsetWidth; pstars.style.animation = 'stars-pop 0.9s ease forwards';
+  gbub.textContent = '😵 Ow!! You punched me!!'; gbub.classList.add('show');
+  setTimeout(() => { guide.classList.remove('punched'); guide.classList.add('falling'); gbub.classList.remove('show'); }, 550);
+  setTimeout(() => { guide.classList.remove('falling','risen'); guide.style.transform = 'translateY(120px)'; }, 1250);
+  setTimeout(() => {
+    setPunched(false); guide.classList.remove('falling');
+    guide.classList.add('waking','risen'); guide.style.transform = '';
+    gbub.textContent = "😤 I'm okay… I think.\nDon't do that again!";
+    setTimeout(() => gbub.classList.add('show'), 400);
+  }, 3000);
+  setTimeout(() => { guide.classList.remove('waking'); gbub.textContent = MSGS[lastSec] || MSGS.home; punchLocked = false; }, 4500);
+});
+</script>
+</body>
+</html>
